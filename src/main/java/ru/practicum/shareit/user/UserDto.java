@@ -20,5 +20,5 @@ public class UserDto {
     public interface OnCreate {}
 
     public interface OnUpdate {}
-    
+
 }

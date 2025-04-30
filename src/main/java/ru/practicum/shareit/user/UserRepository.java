@@ -35,6 +35,7 @@ public class UserRepository {
             users.remove(id);
         }
     }
+
     public boolean existsByEmail(String email) {
         return emailToIdMap.containsKey(email);
     }

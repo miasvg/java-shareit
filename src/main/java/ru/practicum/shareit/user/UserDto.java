@@ -19,6 +19,7 @@ public class UserDto {
     private String email;
 
     // Группы валидации
-    public interface OnCreate {}  // Для POST
+    public interface OnCreate {}
+    // Для POST
     public interface OnUpdate {}  // Для PATCH
 }

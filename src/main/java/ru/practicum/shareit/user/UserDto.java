@@ -21,5 +21,6 @@ public class UserDto {
     // Группы валидации
     public interface OnCreate {}
     // Для POST
-    public interface OnUpdate {}  // Для PATCH
+    public interface OnUpdate {}
+    // Для PATCH
 }

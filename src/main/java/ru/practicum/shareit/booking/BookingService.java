@@ -108,6 +108,7 @@ public class BookingService implements BookingServiceInt {
                 throw new ValidationException("Unknown state: " + state);
         }
     }
+    
     private void validateBookingCreation(BookingDto bookingDto, Long bookerId, Item item) {
         if (!item.getAvailable()) {
             throw new UnavailableItemException("Вещь недоступна для бронирования");

@@ -6,40 +6,31 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.exception.*;
-import ru.practicum.shareit.item.ItemService;
+import ru.practicum.shareit.item.ItemServiceInt;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
-import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.user.UserServiceInt;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookingService {
-    private final BookingRepository bookingRepository;
-    private final UserService userService;
-    private final ItemService itemService;
+public class BookingService implements BookingServiceInt {
+    private final BookingRepo bookingRepository;
+    private final UserServiceInt userService;
+    private final ItemServiceInt itemService;
 
+    @Override
     public BookingResponseDto createBooking(BookingDto bookingDto, Long bookerId) {
-        User booker = userService.getUserEntityById(bookerId); // Используем новый метод
-        Item item = itemService.getItemEntityById(bookingDto.getItemId()); // Используем новый метод
-
-        // Остальная логика без изменений
-        if (!item.getAvailable()) {
-            throw new UnavailableItemException("Вещь недоступна для бронирования");
-        }
-        if (item.getOwner().getId().equals(bookerId)) {
-            throw new NotFoundException("Нельзя бронировать свою вещь");
-        }
-        if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
-            throw new ValidationException("Дата окончания бронирования должна быть после даты начала");
-        }
-
+        User booker = userService.getUserEntityById(bookerId);
+        Item item = itemService.getItemEntityById(bookingDto.getItemId());
+        validateBookingCreation(bookingDto, bookerId, item);
         Booking booking = BookingMapper.toBooking(bookingDto, item, booker);
         Booking savedBooking = bookingRepository.save(booking);
         return BookingMapper.toBookingResponseDto(savedBooking);
     }
 
+    @Override
     public BookingResponseDto approveBooking(Long bookingId, Long ownerId, boolean approved) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено"));
@@ -56,6 +47,7 @@ public class BookingService {
         return BookingMapper.toBookingResponseDto(updatedBooking);
     }
 
+    @Override
     public BookingResponseDto getBookingById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено"));
@@ -69,6 +61,7 @@ public class BookingService {
         return BookingMapper.toBookingResponseDto(booking);
     }
 
+    @Override
     public List<BookingResponseDto> getUserBookings(Long bookerId, String state) {
         userService.getUserById(bookerId);
         List<Booking> bookings = bookingRepository.findAllByBookerId(bookerId);
@@ -77,6 +70,7 @@ public class BookingService {
                 .toList();
     }
 
+    @Override
     public List<BookingResponseDto> getOwnerBookings(Long ownerId, String state) {
         userService.getUserById(ownerId);
         List<Booking> bookings = bookingRepository.findAllByItemOwnerId(ownerId);
@@ -112,6 +106,20 @@ public class BookingService {
                         .toList();
             default:
                 throw new ValidationException("Unknown state: " + state);
+        }
+    }
+    private void validateBookingCreation(BookingDto bookingDto, Long bookerId, Item item) {
+        if (!item.getAvailable()) {
+            throw new UnavailableItemException("Вещь недоступна для бронирования");
+        }
+        if (item.getOwner().getId().equals(bookerId)) {
+            throw new NotFoundException("Нельзя бронировать свою вещь");
+        }
+        if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
+            throw new ValidationException("Дата окончания должна быть после даты начала");
+        }
+        if (bookingDto.getStart().isBefore(LocalDateTime.now())) {
+            throw new ValidationException("Дата начала должна быть в будущем");
         }
     }
 }

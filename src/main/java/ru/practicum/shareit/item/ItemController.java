@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
-    private final ItemService itemService;
+    private final ItemServiceInt itemService;
 
     @PostMapping
     public ItemDto createItem(

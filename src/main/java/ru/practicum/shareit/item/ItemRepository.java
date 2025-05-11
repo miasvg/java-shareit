@@ -1,4 +1,4 @@
-// ItemRepository.java
+
 package ru.practicum.shareit.item;
 
 import org.springframework.stereotype.Repository;
@@ -7,10 +7,11 @@ import ru.practicum.shareit.item.model.Item;
 import java.util.*;
 
 @Repository
-public class ItemRepository {
+public class ItemRepository implements ItemRepo {
     private final Map<Long, Item> items = new HashMap<>();
     private Long idCounter = 1L;
 
+    @Override
     public Item save(Item item) {
         if (item.getId() == null) {
             item.setId(idCounter++);
@@ -19,10 +20,12 @@ public class ItemRepository {
         return item;
     }
 
+    @Override
     public Optional<Item> findById(Long id) {
         return Optional.ofNullable(items.get(id));
     }
 
+    @Override
     public List<Item> findAllByOwnerId(Long ownerId) {
         List<Item> result = new ArrayList<>();
         for (Item item : items.values()) {
@@ -33,6 +36,7 @@ public class ItemRepository {
         return result;
     }
 
+    @Override
     public List<Item> search(String text) {
         if (text.isBlank()) return Collections.emptyList();
 

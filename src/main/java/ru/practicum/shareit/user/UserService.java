@@ -3,18 +3,18 @@ package ru.practicum.shareit.user;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
-    private final UserRepository userRepository;
+public class UserService implements UserServiceInt {
+    private final UserRepo userRepository;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
+    @Override
     public UserDto createUser(UserDto userDto) {
         // Проверяем, что email уникален
         if (userRepository.existsByEmail(userDto.getEmail())) {
@@ -25,6 +25,7 @@ public class UserService {
         return UserMapper.toUserDto(savedUser);
     }
 
+    @Override
     public UserDto updateUser(Long userId, UserDto userDto) {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
@@ -45,24 +46,28 @@ public class UserService {
         return UserMapper.toUserDto(updatedUser);
     }
 
+    @Override
     public UserDto getUserById(Long userId) {
         return userRepository.findById(userId)
                 .map(UserMapper::toUserDto)
                 .orElseThrow(() -> new NotFoundException("Пользователь с ID " + userId + " не найден"));
     }
 
+    @Override
     public List<UserDto> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
     }
 
+    @Override
     public User getUserEntityById(Long userId) {
-        UserDto userDto = getUserById(userId); // Используем существующий метод
-        return UserMapper.toUser(userDto);
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID " + userId + " не найден"));
     }
 }

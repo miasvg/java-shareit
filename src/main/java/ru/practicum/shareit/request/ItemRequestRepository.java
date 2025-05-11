@@ -4,10 +4,11 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-public class ItemRequestRepository {
+public class ItemRequestRepository implements ItemRequestRepo {
     private final Map<Long, ItemRequest> requests = new HashMap<>();
     private Long idCounter = 1L;
 
+    @Override
     public ItemRequest save(ItemRequest request) {
         if (request.getId() == null) {
             request.setId(idCounter++);
@@ -16,10 +17,12 @@ public class ItemRequestRepository {
         return request;
     }
 
+    @Override
     public Optional<ItemRequest> findById(Long id) {
         return Optional.ofNullable(requests.get(id));
     }
 
+    @Override
     public List<ItemRequest> findAllByRequestorId(Long requestorId) {
         List<ItemRequest> result = new ArrayList<>();
         for (ItemRequest request : requests.values()) {
@@ -30,6 +33,7 @@ public class ItemRequestRepository {
         return result;
     }
 
+    @Override
     public List<ItemRequest> findAllExceptRequestor(Long requestorId) {
         List<ItemRequest> result = new ArrayList<>();
         for (ItemRequest request : requests.values()) {

@@ -4,7 +4,11 @@ package ru.practicum.shareit.item.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
+import ru.practicum.shareit.item.comments.CommentDto;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
@@ -24,5 +28,10 @@ public class ItemDto {
 
     private Long requestId;
     private Long ownerId;
+
+    private BookingShortDto lastBooking;
+    private BookingShortDto nextBooking;
+
+    private List<CommentDto> comments = new ArrayList<>();
 
 }

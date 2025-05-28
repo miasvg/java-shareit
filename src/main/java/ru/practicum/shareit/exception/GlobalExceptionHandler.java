@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -24,6 +26,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnavailableItemException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleUnavailableItemException(UnavailableItemException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAccessDeniedException(AccessDeniedException e) {
         return new ErrorResponse(e.getMessage());
     }
 

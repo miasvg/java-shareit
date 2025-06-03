@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface UserServiceInt {
 
-    UserDto createUser(UserDto userDto);
+    User createUser(User user);
 
     UserDto updateUser(Long userId, UserDto userDto);
 
@@ -13,6 +13,5 @@ public interface UserServiceInt {
     List<UserDto> getAllUsers();
 
     void deleteUser(Long userId);
-
 
 }

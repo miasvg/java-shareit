@@ -1,11 +1,12 @@
 package ru.practicum.shareit.user;
 
-
+import jakarta.validation.ValidationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,14 +19,22 @@ public class UserService implements UserServiceInt {
 
     @Override
     @Transactional
-    public UserDto createUser(UserDto userDto) {
-        // Проверяем, что email уникален
-        if (userRepository.existsByEmail(userDto.getEmail())) {
+    public User createUser(User user) {
+        if (user.getEmail() == null) {
+            throw new ValidationException("Email not found");
+        }
+        if (!user.getEmail().contains("@")) {
+            throw new ValidationException("Email must be with @");
+        }
+        Optional<User> existingUser = userRepository.findAll().stream()
+                .filter(u -> u.getEmail().equalsIgnoreCase(user.getEmail()))
+                .findFirst();
+
+        if (existingUser.isPresent()) {
             throw new ConflictException("Email уже используется");
         }
-        User user = UserMapper.toUser(userDto);
-        User savedUser = userRepository.save(user);
-        return UserMapper.toUserDto(savedUser);
+
+        return userRepository.save(user);
     }
 
     @Override

@@ -3,7 +3,6 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.practicum.shareit.user.User;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +21,4 @@ public class Item {
     private Boolean available;
     @Column(name = "owner_id", nullable = false)// Доступна для аренды
     private Long ownerId;
-    @Column(name = "request_id")// Владелец
-    private Long requestId;// Если вещь создана по запросу
 }

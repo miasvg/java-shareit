@@ -9,16 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.comments.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
-
 import java.util.List;
 
+//добавлены логи
 @Slf4j
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemServiceInt itemService;
-    private final static Logger log = LoggerFactory.getLogger(ItemService.class);
+    private static final Logger log = LoggerFactory.getLogger(ItemService.class);
 
     @PostMapping
     public ItemDto createItem(
@@ -57,9 +57,9 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment( @RequestHeader ("X-Sharer-User-Id") long userId,
+    public CommentDto addComment(@RequestHeader ("X-Sharer-User-Id") long userId,
                                   @PathVariable long itemId,
-                                  @RequestBody CommentDto dto){
+                                  @RequestBody CommentDto dto) {
         log.info("Adding comment to item: {}", dto);
         return itemService.addComment(userId, itemId, dto);
     }

@@ -54,7 +54,7 @@ public class BookingService implements BookingServiceInt {
     @Transactional
     public BookingResponseDto updateBookingStatus(Long ownerId, Long bookingId, boolean approved) throws AccessDeniedException {
         log.info("Получен запрос на подтверждение бронирования ID: {} пользователем ID: {}", bookingId, ownerId);
-        System.out.println("000"+ bookingId);
+        System.out.println("000" + bookingId);
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Бронирование не найдено"));
         log.info("Бронирование найдено: {}", booking);

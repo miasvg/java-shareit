@@ -1,25 +1,40 @@
 package ru.practicum.shareit.request;
 
-import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.item.ItemMapper;
+import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
+import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
+import ru.practicum.shareit.request.dto.RequestShortDto;
 import ru.practicum.shareit.user.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ItemRequestMapper {
-    public static ItemRequestDto toItemRequestDto(ItemRequest request) {
-        return new ItemRequestDto(
-                request.getId(),
-                request.getDescription(),
-                request.getCreated()
-        );
+
+    public static ItemRequest toItemRequest(ItemRequestCreateDto dto, User requestor) {
+        ItemRequest itemRequest = new ItemRequest();
+        itemRequest.setDescription(dto.getDescription());
+        itemRequest.setRequestor(requestor);
+        itemRequest.setCreated(LocalDateTime.now());
+        return itemRequest;
     }
 
-    public static ItemRequest toItemRequest(ItemRequestDto requestDto, User requestor) {
-        return new ItemRequest(
-                requestDto.getId(),
-                requestDto.getDescription(),
-                requestor,
-                requestDto.getCreated() != null ? requestDto.getCreated() : LocalDateTime.now()
-        );
+    public static ItemRequestResponseDto toItemRequestResponseDto(ItemRequest request) {
+        return ItemRequestResponseDto.builder()
+                .id(request.getId())
+                .description(request.getDescription())
+                .created(request.getCreated())
+                .items(request.getItems().stream().map(ItemMapper::toItemResponseDto).toList())
+                .build();
+    }
+
+    public static RequestShortDto toShortDto(ItemRequest request) {
+        return RequestShortDto.builder()
+                .id(request.getId())
+                .description(request.getDescription())
+                .created(request.getCreated())
+                .build();
     }
 }
+
+

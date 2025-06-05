@@ -2,50 +2,61 @@ package ru.practicum.shareit.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.request.dto.ItemRequestDto;
-import ru.practicum.shareit.user.User;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.UserServiceInt;
-
+import ru.practicum.shareit.item.ItemRepo;
+import ru.practicum.shareit.request.dto.ItemRequestCreateDto;
+import ru.practicum.shareit.request.dto.ItemRequestResponseDto;
+import ru.practicum.shareit.request.dto.RequestShortDto;
+import ru.practicum.shareit.user.*;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ItemRequestService implements ItemRequestServiceInt {
-    private final ItemRequestRepo requestRepository;
-    private final UserServiceInt userService;
+
+    private final ItemRequestRepository requestRepository;
+    private final ItemRepo itemRepository;
+    private final UserRepo userRepository;
+    private final UserService userService;
+
 
     @Override
-    public ItemRequestDto createRequest(ItemRequestDto requestDto, Long requestorId) {
-        userService.getUserById(requestorId); // Проверяем, что пользователь существует
-        ItemRequest request = ItemRequestMapper.toItemRequest(requestDto, new User(requestorId, null, null));
-        ItemRequest savedRequest = requestRepository.save(request);
-        return ItemRequestMapper.toItemRequestDto(savedRequest);
+    @Transactional
+    public RequestShortDto createRequest(Long userId, ItemRequestCreateDto dto) {
+        User requestor = UserMapper.toUser(userService.getUserById(userId));
+        ItemRequest request = ItemRequestMapper.toItemRequest(dto, requestor);
+        request.setRequestor(requestor);
+        return ItemRequestMapper.toShortDto(requestRepository.save(request));
     }
 
     @Override
-    public List<ItemRequestDto> getUserRequests(Long requestorId) {
-        userService.getUserById(requestorId);
-        return requestRepository.findAllByRequestorId(requestorId).stream()
-                .map(ItemRequestMapper::toItemRequestDto)
+    @Transactional(readOnly = true)
+    public List<ItemRequestResponseDto> getUserRequests(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("пользователь не найден")); // валидация существования
+        List<ItemRequest> requests = requestRepository.findByRequestorIdOrderByCreatedDesc(userId);
+        return requests.stream().
+                map(ItemRequestMapper::toItemRequestResponseDto)
+                .sorted(Comparator.comparing(ItemRequestResponseDto::getCreated).reversed())
                 .toList();
     }
 
     @Override
-    public List<ItemRequestDto> getAllRequests(Long userId, int from, int size) {
-        userService.getUserById(userId);
-        return requestRepository.findAllExceptRequestor(userId).stream()
-                .skip(from)
-                .limit(size)
-                .map(ItemRequestMapper::toItemRequestDto)
-                .toList();
+    @Transactional
+    public ItemRequestResponseDto getRequestById(Long requestId){
+        return ItemRequestMapper.toItemRequestResponseDto(requestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException("запрос не найден")));
     }
 
     @Override
-    public ItemRequestDto getRequestById(Long requestId, Long userId) {
-        userService.getUserById(userId);
-        ItemRequest request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new NotFoundException("Запрос не найден"));
-        return ItemRequestMapper.toItemRequestDto(request);
+    @Transactional
+    public List<ItemRequestResponseDto> getAllRequests(){
+        List<ItemRequest> requests = requestRepository.findAll();
+        return requests.stream()
+                .map(ItemRequestMapper::toItemRequestResponseDto)
+                .sorted(Comparator.comparing(ItemRequestResponseDto::getCreated))
+                .toList();
     }
 }

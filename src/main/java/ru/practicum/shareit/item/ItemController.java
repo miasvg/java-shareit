@@ -8,7 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.comments.CommentDto;
+import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 
 import java.util.List;
 
@@ -21,8 +23,8 @@ public class ItemController {
     private final static Logger log = LoggerFactory.getLogger(ItemService.class);
 
     @PostMapping
-    public ItemDto createItem(
-            @RequestBody @Valid ItemDto itemDto,
+    public ItemResponseDto createItem(
+            @RequestBody @Valid ItemCreateDto itemDto,
             @RequestHeader("X-Sharer-User-Id") Long ownerId) {
         log.info("Creating new item: {}", itemDto);
         return itemService.createItem(itemDto, ownerId);

@@ -3,10 +3,12 @@ package ru.practicum.shareit.item.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ru.practicum.shareit.request.ItemRequest;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "items")
 public class Item {
@@ -21,4 +23,8 @@ public class Item {
     private Boolean available;
     @Column(name = "owner_id", nullable = false)// Доступна для аренды
     private Long ownerId;
+    @ManyToOne
+    @JoinColumn(name = "request_id") // допускаем null — вещь может быть без запроса
+    private ItemRequest request;
+
 }

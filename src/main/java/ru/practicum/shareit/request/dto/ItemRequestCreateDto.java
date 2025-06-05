@@ -4,15 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemRequestDto {
-    private Long id;
-
+public class ItemRequestCreateDto {
     @NotBlank(message = "Описание запроса не может быть пустым")
     private String description;
-
     private LocalDateTime created;
 }

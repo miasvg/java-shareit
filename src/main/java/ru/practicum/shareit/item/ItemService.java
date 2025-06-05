@@ -10,8 +10,12 @@ import ru.practicum.shareit.item.comments.Comment;
 import ru.practicum.shareit.item.comments.CommentDto;
 import ru.practicum.shareit.item.comments.CommentMapper;
 import ru.practicum.shareit.item.comments.CommentRepository;
+import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.request.ItemRequestRepository;
 import ru.practicum.shareit.user.*;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.booking.BookingRepo;
@@ -32,8 +36,9 @@ public class ItemService implements ItemServiceInt {
     private final CommentRepository commentRepository;
     private final ItemMapper itemMapper;
     private final UserRepo userRepository;
+    private final ItemRequestRepository itemRequestRepository;
 
-    public ItemService(ItemRepo itemRepository, UserService userService, BookingRepo bookingRepository, CommentRepository commentRepository, UserRepo userRepository) {
+    public ItemService(ItemRepo itemRepository, UserService userService, BookingRepo bookingRepository, CommentRepository commentRepository, UserRepo userRepository, ItemRequestRepository itemRequestRepository) {
         this.itemRepository = itemRepository;
         this.userService = userService;
         this.userRepository = userRepository;
@@ -41,17 +46,22 @@ public class ItemService implements ItemServiceInt {
         this.bookingRepository = bookingRepository;
         this.commentRepository = commentRepository;
         this.itemMapper = new ItemMapper();
+        this.itemRequestRepository = itemRequestRepository;
     }
 
     @Override
     @Transactional
-    public ItemDto createItem(ItemDto itemDto, Long ownerId) {
+    public ItemResponseDto createItem(ItemCreateDto itemDto, Long ownerId) {
         // Проверяем существование пользователя
         User owner = userMapper.toUser(userService.getUserById(ownerId));
-        Item item = ItemMapper.toItem(itemDto, ownerId);
+        ItemRequest request = null;
+        if(itemDto.getRequestId() != null){
+            request = itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(() -> new NotFoundException("Запрос не найден"));
+        }
+        Item item = ItemMapper.toItem(itemDto, owner, request);
         item.setOwnerId(ownerId);
         Item savedItem = itemRepository.save(item);
-        return ItemMapper.toItemDto(savedItem);
+        return ItemMapper.toItemResponseDto(savedItem);
     }
 
     @Override

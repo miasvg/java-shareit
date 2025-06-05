@@ -7,8 +7,14 @@ import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.item.comments.Comment;
 import ru.practicum.shareit.item.comments.CommentMapper;
+import ru.practicum.shareit.item.dto.ItemCreateDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemForRequestDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.ItemRequest;
+import ru.practicum.shareit.user.User;
+
 import java.util.List;
 
 @Component
@@ -51,4 +57,33 @@ public class ItemMapper {
         }
         return dto;
     }
+
+    public static ItemResponseDto toItemResponseDto(Item item) {
+        return new ItemResponseDto(
+                item.getId(),
+                item.getName(),
+                item.getDescription(),
+                item.getAvailable(),
+                item.getRequest() != null ? item.getRequest().getId() : null
+        );
+    }
+
+    public static ItemForRequestDto itemForRequestDto(Item item) {
+        return ItemForRequestDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .ownerId(item.getOwnerId())
+                .build();
+    }
+
+    public static Item toItem(ItemCreateDto dto, User owner, ItemRequest request) {
+        Item item = new Item();
+        item.setName(dto.getName());
+        item.setDescription(dto.getDescription());
+        item.setAvailable(dto.getAvailable());
+        item.setOwnerId(owner.getId());
+        item.setRequest(request); // может быть null
+        return item;
+    }
+
 }

@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,8 +19,5 @@ public class ItemDto {
 
     @NotNull(message = "Статус доступности обязателен")
     private Boolean available;
-
-    private Long requestId;
-    private Long ownerId;
 
 }

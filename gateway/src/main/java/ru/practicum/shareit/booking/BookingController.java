@@ -53,6 +53,7 @@ public class BookingController {
                                                       @RequestParam Boolean approved) {
         return bookingClient.updateBookingStatus(userId, bookingId, approved);
     }
+
     @GetMapping("/owner")
     public ResponseEntity<Object> getBookingsForOwner(@RequestHeader("X-Sharer-User-Id") Long ownerId,
                                                       @RequestParam(defaultValue = "ALL") String state,

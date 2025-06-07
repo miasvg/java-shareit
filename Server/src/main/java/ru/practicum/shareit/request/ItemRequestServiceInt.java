@@ -7,8 +7,12 @@ import ru.practicum.shareit.request.dto.RequestShortDto;
 import java.util.List;
 
 public interface ItemRequestServiceInt {
+
     RequestShortDto createRequest(Long userId, ItemRequestCreateDto dto);
+
     List<ItemRequestResponseDto> getUserRequests(Long userId);
+
     ItemRequestResponseDto getRequestById(Long requestId);
+
     List<ItemRequestResponseDto> getAllRequests();
 }

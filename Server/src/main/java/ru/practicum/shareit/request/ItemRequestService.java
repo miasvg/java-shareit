@@ -37,22 +37,22 @@ public class ItemRequestService implements ItemRequestServiceInt {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("пользователь не найден")); // валидация существования
         List<ItemRequest> requests = requestRepository.findByRequestorIdOrderByCreatedDesc(userId);
-        return requests.stream().
-                map(ItemRequestMapper::toItemRequestResponseDto)
+        return requests.stream()
+                .map(ItemRequestMapper::toItemRequestResponseDto)
                 .sorted(Comparator.comparing(ItemRequestResponseDto::getCreated).reversed())
                 .toList();
     }
 
     @Override
     @Transactional
-    public ItemRequestResponseDto getRequestById(Long requestId){
+    public ItemRequestResponseDto getRequestById(Long requestId) {
         return ItemRequestMapper.toItemRequestResponseDto(requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("запрос не найден")));
     }
 
     @Override
     @Transactional
-    public List<ItemRequestResponseDto> getAllRequests(){
+    public List<ItemRequestResponseDto> getAllRequests() {
         List<ItemRequest> requests = requestRepository.findAll();
         return requests.stream()
                 .map(ItemRequestMapper::toItemRequestResponseDto)

@@ -7,6 +7,7 @@ import org.springframework.boot.test.json.JsonContent;
 import ru.practicum.shareit.user.UserDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
+
 @JsonTest
 public class UserDtoTest {
 

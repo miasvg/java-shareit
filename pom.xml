@@ -22,7 +22,7 @@
 
 	<modules>
 		<module>gateway</module>
-		<module>server</module>
+		<module>Server</module>
 	</modules>
 
 	<build>

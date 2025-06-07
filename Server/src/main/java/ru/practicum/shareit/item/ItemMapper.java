@@ -41,7 +41,6 @@ public class ItemMapper {
 
     public static ItemWithBookingsAndCommentsDto toItemWithBookingsAndCommentsDto(Item item,
                                                                                   List<Booking> bookings, List<Comment> comments) {
-        CommentMapper commentMapper = new CommentMapper();
         ItemWithBookingsAndCommentsDto dto = ItemWithBookingsAndCommentsDto.builder()
                 .id(item.getId())
                 .name(item.getName())

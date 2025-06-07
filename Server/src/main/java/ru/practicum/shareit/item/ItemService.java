@@ -55,7 +55,7 @@ public class ItemService implements ItemServiceInt {
         // Проверяем существование пользователя
         User owner = userMapper.toUser(userService.getUserById(ownerId));
         ItemRequest request = null;
-        if(itemDto.getRequestId() != null) {
+        if (itemDto.getRequestId() != null) {
             request = itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(() -> new NotFoundException("Запрос не найден"));
         }
         Item item = ItemMapper.toItem(itemDto, owner, request);

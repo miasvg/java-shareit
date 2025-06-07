@@ -31,12 +31,7 @@ class BookingDtoTest {
 
     @Test
     void testDeserialize() throws Exception {
-        String content = """
-                {"start": "2025-01-01T12:00:00",
-                  "end": "2025-01-02T12:00:00",
-                  "itemId": 1}
-                """;
-
+        String content = "{\"start\":\"2025-01-01T12:00:00\",\"end\":\"2025-01-02T12:00:00\",\"itemId\":1}";
         BookingDto result = json.parseObject(content);
 
         assertThat(result.getStart()).isEqualTo(LocalDateTime.of(2025, 1, 1, 12, 0));

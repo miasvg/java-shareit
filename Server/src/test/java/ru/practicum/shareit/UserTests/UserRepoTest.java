@@ -11,7 +11,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-class UserRepoTest {
+public class UserRepoTest {
 
     @Autowired
     private TestEntityManager em;
@@ -20,7 +20,7 @@ class UserRepoTest {
     private UserRepo userRepo;
 
     @Test
-    void existsByEmail_ShouldReturnTrue_WhenEmailExists() {
+    public void existsByEmail_ShouldReturnTrue_WhenEmailExists() {
         User user = new User(null, "John", "john@example.com");
         em.persist(user);
 
@@ -30,14 +30,14 @@ class UserRepoTest {
     }
 
     @Test
-    void existsByEmail_ShouldReturnFalse_WhenEmailNotExists() {
+    public void existsByEmail_ShouldReturnFalse_WhenEmailNotExists() {
         boolean exists = userRepo.existsByEmail("nope@example.com");
 
         assertFalse(exists);
     }
 
     @Test
-    void findById_ShouldReturnUser() {
+    public void findById_ShouldReturnUser() {
         User user = new User(null, "John", "john@example.com");
         em.persist(user);
 

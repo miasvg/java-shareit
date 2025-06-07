@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ItemServiceTest {
+public class ItemServiceTest {
 
     @Mock private ItemRepo itemRepo;
     @Mock private UserService userService;
@@ -35,12 +35,12 @@ class ItemServiceTest {
     private ItemService itemService;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         itemService = new ItemService(itemRepo, userService, bookingRepo, commentRepo, userRepo, itemRequestRepo);
     }
 
     @Test
-    void createItem_shouldReturnSavedItemResponseDto() {
+    public void createItem_shouldReturnSavedItemResponseDto() {
         ItemCreateDto dto = new ItemCreateDto("item", "desc", true, null);
         User owner = new User(1L, "test", "test@email.com");
         Item item = new Item(null, "item", "desc", true, 1L, null);
@@ -56,7 +56,7 @@ class ItemServiceTest {
     }
 
     @Test
-    void updateItem_shouldUpdateFields() {
+    public void updateItem_shouldUpdateFields() {
         Item existingItem = new Item(1L, "old", "old", true, 1L, null);
         ItemDto dto = new ItemDto(null, "new", "desc", false);
         when(itemRepo.findById(1L)).thenReturn(Optional.of(existingItem));

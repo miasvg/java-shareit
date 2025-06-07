@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-class UserControllerTests {
+public class UserControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,12 +34,12 @@ class UserControllerTests {
     private UserDto userDto;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         userDto = new UserDto(1L, "John", "john@example.com");
     }
 
     @Test
-    void createUser_ShouldReturnCreatedUser() throws Exception {
+    public void createUser_ShouldReturnCreatedUser() throws Exception {
         when(userService.createUser(any())).thenReturn(userDto);
 
         mockMvc.perform(post("/users")
@@ -52,7 +52,7 @@ class UserControllerTests {
     }
 
     @Test
-    void updateUser_ShouldReturnUpdatedUser() throws Exception {
+    public void updateUser_ShouldReturnUpdatedUser() throws Exception {
         when(userService.updateUser(eq(1L), any())).thenReturn(userDto);
 
         mockMvc.perform(patch("/users/1")
@@ -63,7 +63,7 @@ class UserControllerTests {
     }
 
     @Test
-    void getUserById_ShouldReturnUser() throws Exception {
+    public void getUserById_ShouldReturnUser() throws Exception {
         when(userService.getUserById(1L)).thenReturn(userDto);
 
         mockMvc.perform(get("/users/1"))
@@ -72,7 +72,7 @@ class UserControllerTests {
     }
 
     @Test
-    void getAllUsers_ShouldReturnList() throws Exception {
+    public void getAllUsers_ShouldReturnList() throws Exception {
         when(userService.getAllUsers()).thenReturn(List.of(userDto));
 
         mockMvc.perform(get("/users"))
@@ -81,7 +81,7 @@ class UserControllerTests {
     }
 
     @Test
-    void deleteUser_ShouldReturnOk() throws Exception {
+    public void deleteUser_ShouldReturnOk() throws Exception {
         mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isOk());
     }

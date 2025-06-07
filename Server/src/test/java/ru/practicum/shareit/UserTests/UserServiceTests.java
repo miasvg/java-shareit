@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTests {
+public class UserServiceTests {
 
     @Mock
     private UserRepo userRepo;
@@ -31,13 +31,13 @@ class UserServiceTests {
     private UserDto userDto;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         user = new User(1L, "John", "john@example.com");
         userDto = new UserDto(1L, "John", "john@example.com");
     }
 
     @Test
-    void createUser_ShouldSaveNewUser() {
+    public void createUser_ShouldSaveNewUser() {
         when(userRepo.existsByEmail(user.getEmail())).thenReturn(false);
         when(userRepo.save(any(User.class))).thenReturn(user);
 
@@ -47,14 +47,14 @@ class UserServiceTests {
     }
 
     @Test
-    void createUser_ShouldThrowConflict_WhenEmailExists() {
+    public void createUser_ShouldThrowConflict_WhenEmailExists() {
         when(userRepo.existsByEmail(userDto.getEmail())).thenReturn(true);
 
         assertThrows(ConflictException.class, () -> userService.createUser(userDto));
     }
 
     @Test
-    void updateUser_ShouldUpdateNameAndEmail() {
+    public void updateUser_ShouldUpdateNameAndEmail() {
         User updated = new User(1L, "Updated", "updated@example.com");
 
         when(userRepo.findById(1L)).thenReturn(Optional.of(user));
@@ -69,14 +69,14 @@ class UserServiceTests {
     }
 
     @Test
-    void updateUser_ShouldThrowNotFound() {
+    public void updateUser_ShouldThrowNotFound() {
         when(userRepo.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> userService.updateUser(1L, userDto));
     }
 
     @Test
-    void updateUser_ShouldThrowConflict_WhenEmailTaken() {
+    public void updateUser_ShouldThrowConflict_WhenEmailTaken() {
         when(userRepo.findById(1L)).thenReturn(Optional.of(user));
         when(userRepo.existsByEmail("other@example.com")).thenReturn(true);
 
@@ -86,7 +86,7 @@ class UserServiceTests {
     }
 
     @Test
-    void getUserById_ShouldReturnUser() {
+    public void getUserById_ShouldReturnUser() {
         when(userRepo.findById(1L)).thenReturn(Optional.of(user));
 
         UserDto result = userService.getUserById(1L);
@@ -95,14 +95,14 @@ class UserServiceTests {
     }
 
     @Test
-    void getUserById_ShouldThrowNotFound() {
+    public void getUserById_ShouldThrowNotFound() {
         when(userRepo.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> userService.getUserById(1L));
     }
 
     @Test
-    void getAllUsers_ShouldReturnList() {
+    public void getAllUsers_ShouldReturnList() {
         when(userRepo.findAll()).thenReturn(List.of(user));
 
         List<UserDto> users = userService.getAllUsers();
@@ -111,7 +111,7 @@ class UserServiceTests {
     }
 
     @Test
-    void deleteUser_ShouldCallDeleteById() {
+    public void deleteUser_ShouldCallDeleteById() {
         userService.deleteUser(1L);
         verify(userRepo).deleteById(1L);
     }

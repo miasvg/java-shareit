@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ItemRequestController.class)
-class ItemRequestControllerTest {
+public class ItemRequestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,7 +37,7 @@ class ItemRequestControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void createRequest_shouldReturnShortDto() throws Exception {
+    public void createRequest_shouldReturnShortDto() throws Exception {
         ItemRequestCreateDto createDto = new ItemRequestCreateDto("Нужна отвертка", LocalDateTime.now());
         RequestShortDto responseDto = new RequestShortDto(1L, "Нужна отвертка", LocalDateTime.now());
 
@@ -52,7 +52,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getUserRequests_shouldReturnList() throws Exception {
+    public void getUserRequests_shouldReturnList() throws Exception {
         List<ItemRequestResponseDto> list = List.of(
                 ItemRequestResponseDto.builder().id(1L).description("A").created(LocalDateTime.now()).items(List.of()).build()
         );
@@ -66,7 +66,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getRequestById_shouldReturnDto() throws Exception {
+    public void getRequestById_shouldReturnDto() throws Exception {
         ItemRequestResponseDto dto = ItemRequestResponseDto.builder()
                 .id(1L).description("B").created(LocalDateTime.now()).items(List.of()).build();
 
@@ -78,7 +78,7 @@ class ItemRequestControllerTest {
     }
 
     @Test
-    void getAllRequests_shouldReturnList() throws Exception {
+    public void getAllRequests_shouldReturnList() throws Exception {
         List<ItemRequestResponseDto> list = List.of(
                 ItemRequestResponseDto.builder().id(2L).description("C").created(LocalDateTime.now()).items(List.of()).build()
         );

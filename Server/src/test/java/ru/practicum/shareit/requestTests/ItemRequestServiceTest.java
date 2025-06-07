@@ -28,7 +28,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ItemRequestServiceTest {
+public class ItemRequestServiceTest {
 
     @InjectMocks
     private ItemRequestService service;
@@ -46,7 +46,7 @@ class ItemRequestServiceTest {
     private UserService userService;
 
     @Test
-    void createRequest_shouldReturnShortDto() {
+    public void createRequest_shouldReturnShortDto() {
         User user = new User(1L, "Test", "test@mail.com");
         ItemRequestCreateDto dto = new ItemRequestCreateDto("Описание", LocalDateTime.now());
         ItemRequest request = ItemRequestMapper.toItemRequest(dto, user);
@@ -62,7 +62,7 @@ class ItemRequestServiceTest {
     }
 
     @Test
-    void getUserRequests_shouldReturnList() {
+    public void getUserRequests_shouldReturnList() {
         User user = new User(1L, "Test", "test@mail.com");
         ItemRequest request = ItemRequest.builder()
                 .id(1L)
@@ -81,7 +81,7 @@ class ItemRequestServiceTest {
     }
 
     @Test
-    void getRequestById_shouldReturnDto() {
+    public void getRequestById_shouldReturnDto() {
         ItemRequest request = ItemRequest.builder()
                 .id(1L)
                 .description("Описание")

@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @JsonTest
-class ItemRequestDtoTest {
+public class ItemRequestDtoTest {
 
     @Autowired
     private JacksonTester<ItemRequestCreateDto> createDtoTester;
@@ -23,7 +23,7 @@ class ItemRequestDtoTest {
     private JacksonTester<ItemRequestResponseDto> responseDtoTester;
 
     @Test
-    void testSerializeAndDeserializeItemRequestCreateDto() throws Exception {
+    public void testSerializeAndDeserializeItemRequestCreateDto() throws Exception {
         ItemRequestCreateDto dto = new ItemRequestCreateDto("Нужен молоток", LocalDateTime.of(2025, 6, 1, 12, 0));
         String json = createDtoTester.write(dto).getJson();
 
@@ -33,7 +33,7 @@ class ItemRequestDtoTest {
     }
 
     @Test
-    void testSerializeItemRequestResponseDto() throws Exception {
+    public void testSerializeItemRequestResponseDto() throws Exception {
         ItemRequestResponseDto dto = ItemRequestResponseDto.builder()
                 .id(1L)
                 .description("Описание")

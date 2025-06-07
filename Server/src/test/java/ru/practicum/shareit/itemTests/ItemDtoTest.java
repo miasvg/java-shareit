@@ -16,7 +16,7 @@ public class ItemDtoTest {
 
 
     @Test
-    void serialize_CreateDto() throws Exception {
+    public void serialize_CreateDto() throws Exception {
         ItemCreateDto dto = new ItemCreateDto("Дрель", "Аккумуляторная", true, null);
         JsonContent<ItemCreateDto> result = json.write(dto);
 

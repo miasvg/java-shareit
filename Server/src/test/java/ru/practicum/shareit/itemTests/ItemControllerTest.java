@@ -27,7 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 @WebMvcTest(ItemController.class)
 @AutoConfigureMockMvc
-class ItemControllerTest {
+public class ItemControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,13 +42,13 @@ class ItemControllerTest {
     private ItemResponseDto itemResponseDto;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         itemCreateDto = new ItemCreateDto("Drill", "Powerful drill", true, null);
         itemResponseDto = new ItemResponseDto(1L, "Drill", "Powerful drill", true, null);
     }
 
     @Test
-    void createItem_shouldReturnItemResponseDto() throws Exception {
+    public void createItem_shouldReturnItemResponseDto() throws Exception {
         when(itemService.createItem(any(), eq(1L))).thenReturn(itemResponseDto);
 
         mockMvc.perform(post("/items")
@@ -61,7 +61,7 @@ class ItemControllerTest {
     }
 
     @Test
-    void getAllItemsByOwner_shouldReturnListOfItems() throws Exception {
+    public void getAllItemsByOwner_shouldReturnListOfItems() throws Exception {
         List<ItemDto> items = List.of(new ItemDto(1L, "Drill", "Desc", true));
         when(itemService.getAllItemsByOwner(1L)).thenReturn(items);
 

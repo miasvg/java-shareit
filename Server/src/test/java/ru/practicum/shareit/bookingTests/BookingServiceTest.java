@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BookingServiceTest {
+public class BookingServiceTest {
 
     @InjectMocks
     private BookingService service;
@@ -49,7 +49,7 @@ class BookingServiceTest {
     private BookingDto bookingDto;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         booker = new User(1L, "User", "user@mail.com");
         item = new Item(1L, "Item", "Desc", true, 2L, null);
 
@@ -61,7 +61,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void createBooking_whenValid_shouldReturnResponseDto() {
+    public void createBooking_whenValid_shouldReturnResponseDto() {
         when(userRepo.findById(booker.getId())).thenReturn(Optional.of(booker));
         when(itemRepo.findById(item.getId())).thenReturn(Optional.of(item));
         when(bookingRepo.save(any())).thenAnswer(i -> {
@@ -77,7 +77,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void createBooking_whenItemUnavailable_shouldThrow() {
+    public void createBooking_whenItemUnavailable_shouldThrow() {
         item.setAvailable(false);
         when(userRepo.findById(booker.getId())).thenReturn(Optional.of(booker));
         when(itemRepo.findById(item.getId())).thenReturn(Optional.of(item));
@@ -88,7 +88,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void updateBookingStatus_whenNotOwner_shouldThrowAccessDenied() {
+    public void updateBookingStatus_whenNotOwner_shouldThrowAccessDenied() {
         Booking booking = new Booking(1L, bookingDto.getStart(), bookingDto.getEnd(), item, booker, BookingStatus.WAITING);
         when(bookingRepo.findById(1L)).thenReturn(Optional.of(booking));
 
@@ -97,7 +97,7 @@ class BookingServiceTest {
     }
 
     @Test
-    void getBooking_whenNotOwnerOrBooker_shouldThrow() {
+    public void getBooking_whenNotOwnerOrBooker_shouldThrow() {
         Booking booking = new Booking(1L, bookingDto.getStart(), bookingDto.getEnd(), item, booker, BookingStatus.WAITING);
         when(bookingRepo.findById(1L)).thenReturn(Optional.of(booking));
 

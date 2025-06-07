@@ -12,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-class ItemRequestRepositoryTest {
+public class ItemRequestRepositoryTest {
 
     @Autowired
     private TestEntityManager em;
@@ -21,7 +21,7 @@ class ItemRequestRepositoryTest {
     private ItemRequestRepository repository;
 
     @Test
-    void findByRequestorIdOrderByCreatedDesc_shouldReturnRequests() {
+    public void findByRequestorIdOrderByCreatedDesc_shouldReturnRequests() {
         User user = new User(null, "user", "user@mail.com");
         em.persist(user);
 

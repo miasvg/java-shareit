@@ -16,7 +16,7 @@ import java.util.List;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({ItemMapper.class})
-class ItemRepositoryTest {
+public class ItemRepositoryTest {
 
     @Autowired
     private TestEntityManager em;
@@ -25,7 +25,7 @@ class ItemRepositoryTest {
     private ItemRepo itemRepo;
 
     @Test
-    void findAllByOwnerId_shouldReturnCorrectItems() {
+    public void findAllByOwnerId_shouldReturnCorrectItems() {
         Item item1 = new Item(null, "item1", "desc1", true, 1L, null);
         Item item2 = new Item(null, "item2", "desc2", true, 2L, null);
         em.persist(item1);
@@ -38,7 +38,7 @@ class ItemRepositoryTest {
     }
 
     @Test
-    void search_shouldReturnMatchingItems() {
+    public void search_shouldReturnMatchingItems() {
         em.persist(new Item(null, "Drill", "Power tool", true, 1L, null));
         em.persist(new Item(null, "Hammer", "Strong tool", true, 1L, null));
         em.persist(new Item(null, "Screwdriver", "Precision", false, 1L, null));

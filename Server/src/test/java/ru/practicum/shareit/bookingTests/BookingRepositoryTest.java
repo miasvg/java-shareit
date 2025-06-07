@@ -31,7 +31,7 @@ class BookingRepositoryTest {
     private Booking booking;
 
     @BeforeEach
-    void setup() {
+    public void setup() {
         user = em.persist(new User(null, "User", "user@email.com"));
         User owner = em.persist(new User(null, "Owner", "owner@email.com"));
         item = em.persist(new Item(null, "Item", "Desc", true, owner.getId(), null));
@@ -46,14 +46,14 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findByBookerIdOrderByStartDesc() {
+    public void findByBookerIdOrderByStartDesc() {
         List<Booking> found = bookingRepo.findByBookerIdOrderByStartDesc(user.getId());
         assertThat(found).hasSize(1);
         assertThat(found.get(0).getBooker().getId()).isEqualTo(user.getId());
     }
 
     @Test
-    void findFirstByBookerIdAndItemIdAndEndBeforeOrderByEndDesc() {
+    public void findFirstByBookerIdAndItemIdAndEndBeforeOrderByEndDesc() {
         booking.setEnd(LocalDateTime.now().minusHours(1));
         em.persistAndFlush(booking);
 
@@ -64,7 +64,7 @@ class BookingRepositoryTest {
     }
 
     @Test
-    void findByStatusAndItem_id() {
+    public void findByStatusAndItem_id() {
         List<Booking> found = bookingRepo.findByStatusAndItem_id(BookingStatus.WAITING, item.getId());
         assertThat(found).hasSize(1);
     }

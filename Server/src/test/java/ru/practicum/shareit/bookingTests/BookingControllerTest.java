@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = BookingController.class)
-class BookingControllerTest {
+public class BookingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -38,13 +38,13 @@ class BookingControllerTest {
     private BookingResponseDto response;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         dto = new BookingDto(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusDays(1), 1L);
         response = new BookingResponseDto(1L, dto.getStart(), dto.getEnd(), null, null, BookingStatus.WAITING);
     }
 
     @Test
-    void createBooking_shouldReturn200() throws Exception {
+    public void createBooking_shouldReturn200() throws Exception {
         when(bookingService.createBooking(eq(1L), any())).thenReturn(response);
 
         mockMvc.perform(post("/bookings")
@@ -56,7 +56,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void updateBooking_shouldReturnApproved() throws Exception {
+    public void updateBooking_shouldReturnApproved() throws Exception {
         response.setStatus(BookingStatus.APPROVED);
         when(bookingService.updateBookingStatus(2L, 1L, true)).thenReturn(response);
 
@@ -68,7 +68,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void getBooking_shouldReturnBooking() throws Exception {
+    public void getBooking_shouldReturnBooking() throws Exception {
         when(bookingService.getBooking(1L, 1L)).thenReturn(response);
 
         mockMvc.perform(get("/bookings/1")
@@ -78,7 +78,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void getBookingsForUser_shouldReturnList() throws Exception {
+    public void getBookingsForUser_shouldReturnList() throws Exception {
         when(bookingService.getBookingsForUser(1L, "ALL")).thenReturn(List.of(response));
 
         mockMvc.perform(get("/bookings")
@@ -88,7 +88,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void getBookingsForOwner_shouldReturnList() throws Exception {
+    public void getBookingsForOwner_shouldReturnList() throws Exception {
         when(bookingService.getBookingsForOwner(2L, "ALL")).thenReturn(List.of(response));
 
         mockMvc.perform(get("/bookings/owner")

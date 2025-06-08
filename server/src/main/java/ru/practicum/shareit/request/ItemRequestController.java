@@ -14,15 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ItemRequestController {
     private final ItemRequestService itemRequestService;
+    public static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
+
 
     @PostMapping
     public RequestShortDto createRequest(@RequestBody ItemRequestCreateDto dto,
-                                         @RequestHeader("X-Sharer-User-Id") Long userId) {
+                                         @RequestHeader(X_SHARER_USER_ID) Long userId) {
         return itemRequestService.createRequest(userId, dto);
     }
 
     @GetMapping
-    public List<ItemRequestResponseDto> getUserRequests(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public List<ItemRequestResponseDto> getUserRequests(@RequestHeader(X_SHARER_USER_ID) Long userId) {
         return itemRequestService.getUserRequests(userId);
     }
 

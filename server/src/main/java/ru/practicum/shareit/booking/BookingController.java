@@ -17,9 +17,10 @@ public class BookingController {
 
     private final BookingService bookingService;
     private static final Logger log = LoggerFactory.getLogger(BookingService.class);
+    public static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
 
     @PostMapping
-    public BookingResponseDto createBooking(@RequestHeader("X-Sharer-User-Id") Long userId, @RequestBody BookingDto dto) {
+    public BookingResponseDto createBooking(@RequestHeader(X_SHARER_USER_ID) Long userId, @RequestBody BookingDto dto) {
         log.info("Create booking: {}", dto);
         return bookingService.createBooking(userId, dto);
     }
@@ -27,28 +28,28 @@ public class BookingController {
     @PatchMapping("/{bookingId}")
     public BookingResponseDto updateBookingStatus(@PathVariable Long bookingId,
                                                   @RequestParam boolean approved,
-                                                  @RequestHeader("X-Sharer-User-Id") Long ownerId) throws AccessDeniedException {
+                                                  @RequestHeader(X_SHARER_USER_ID) Long ownerId) throws AccessDeniedException {
         log.info("Update booking: {}", bookingId);
         return bookingService.updateBookingStatus(ownerId,bookingId,approved);
     }
 
     @GetMapping("/{bookingId}")
     public BookingResponseDto getBooking(@PathVariable Long bookingId,
-                                         @RequestHeader("X-Sharer-User-Id") Long userId) {
+                                         @RequestHeader(X_SHARER_USER_ID) Long userId) {
         log.info("Get booking: {}", bookingId);
         return bookingService.getBooking(bookingId, userId);
     }
 
     @GetMapping
     public List<BookingResponseDto> getBookingsForUser(@RequestParam(defaultValue = "ALL") String state,
-                                                       @RequestHeader("X-Sharer-User-Id") Long userId) {
+                                                       @RequestHeader(X_SHARER_USER_ID) Long userId) {
         log.info("Get bookings for user: {}", userId);
         return bookingService.getBookingsForUser(userId, state);
     }
 
     @GetMapping("/owner")
     public List<BookingResponseDto> getBookingsForOwner(@RequestParam(defaultValue = "ALL") String state,
-                                                        @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+                                                        @RequestHeader(X_SHARER_USER_ID) Long ownerId) {
         log.info("Get bookings for owner: {}", ownerId);
         return bookingService.getBookingsForOwner(ownerId, state);
     }

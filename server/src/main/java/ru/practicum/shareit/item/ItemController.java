@@ -19,11 +19,12 @@ import java.util.List;
 public class ItemController {
     private final ItemServiceInt itemService;
     private static final Logger log = LoggerFactory.getLogger(ItemService.class);
+    public static final String X_SHARER_USER_ID = "X-Sharer-User-Id";
 
     @PostMapping
     public ItemResponseDto createItem(
             @RequestBody ItemCreateDto itemDto,
-            @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+            @RequestHeader(X_SHARER_USER_ID) Long ownerId) {
         log.info("Creating new item: {}", itemDto);
         return itemService.createItem(itemDto, ownerId);
     }
@@ -32,7 +33,7 @@ public class ItemController {
     public ItemDto updateItem(
             @PathVariable Long itemId,
             @RequestBody ItemDto itemDto,
-            @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+            @RequestHeader(X_SHARER_USER_ID) Long ownerId) {
         log.info("Updating item: {}", itemDto);
         return itemService.updateItem(itemId, itemDto, ownerId);
     }
@@ -45,7 +46,7 @@ public class ItemController {
 
     @GetMapping
     public List<ItemDto> getAllItemsByOwner(
-            @RequestHeader("X-Sharer-User-Id") Long ownerId) {
+            @RequestHeader(X_SHARER_USER_ID) Long ownerId) {
         log.info("Getting items by owner: {}", ownerId);
         return itemService.getAllItemsByOwner(ownerId);
     }
@@ -57,7 +58,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
-    public CommentDto addComment(@RequestHeader ("X-Sharer-User-Id") long userId,
+    public CommentDto addComment(@RequestHeader (X_SHARER_USER_ID) long userId,
                                   @PathVariable long itemId,
                                   @RequestBody CommentDto dto) {
         log.info("Adding comment to item: {}", dto);
